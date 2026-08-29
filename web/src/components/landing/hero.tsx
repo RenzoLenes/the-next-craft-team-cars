@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { PillLink } from "@/components/landing/pill-link";
 
 /** Cadencia real del generador (simulator/generator/src/generator.ts). */
@@ -17,11 +19,13 @@ export function Hero() {
     <section className="relative isolate min-h-[100dvh] overflow-hidden bg-[#0b1114]">
       {/* Dron sobre un bus en curva de bosque — Pexels, Oskar Gross. Transcodificado y servido local. */}
       {/* Con prefers-reduced-motion el video se oculta y queda el fotograma fijo. */}
-      <img
+      <Image
         src="/hero-poster.jpg"
         alt=""
-        aria-hidden
-        className="absolute inset-0 size-full object-cover"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
       />
       <video
         className="absolute inset-0 size-full object-cover motion-reduce:hidden"

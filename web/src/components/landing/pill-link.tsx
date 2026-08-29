@@ -45,19 +45,27 @@ export function PillLink({
           bubble,
         )}
       >
-        <svg
-          viewBox="0 0 12 12"
-          className="size-3"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <path d="M3 9L9 3M9 3H4.5M9 3v4.5" />
-        </svg>
+        <Arrow />
       </span>
     </Link>
+  );
+}
+
+/** Flecha decorativa de los CTA. Oculta al árbol de accesibilidad; el <title> satisface el lint. */
+export function Arrow() {
+  return (
+    <svg
+      viewBox="0 0 12 12"
+      className="size-3"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <title>Flecha</title>
+      <path d="M3 9L9 3M9 3H4.5M9 3v4.5" />
+    </svg>
   );
 }
