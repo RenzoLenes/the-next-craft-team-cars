@@ -1,20 +1,29 @@
 const signals = [
   {
-    code: "OK",
-    title: "Operación nominal",
-    body: "Las métricas están dentro de umbral. La unidad sigue en ruta sin intervención.",
+    code: "NOMINAL",
+    tone: "ok" as const,
+    title: "Dentro de lo esperado",
+    body: "Las lecturas coinciden con el comportamiento aprendido para estas condiciones. No hay nada que hacer, y decirlo también es información.",
   },
   {
-    code: "ALERTA",
-    title: "Atención requerida",
-    body: "Un sensor cruzó un límite suave (velocidad, temperatura o batería). Notifica al equipo.",
+    code: "DESVIACIÓN",
+    tone: "warn" as const,
+    title: "Ya no se parece a sí mismo",
+    body: "El motor se aparta de su propio patrón de forma sostenida. Todavía no hay código de falla ni luz en el tablero. Esta es la ventana donde una reparación es barata.",
   },
   {
-    code: "LÍMITE",
-    title: "Señal de control",
-    body: "Umbral crítico. Emite una señal accionable: reducir velocidad, detener o solicitar soporte.",
+    code: "CRÍTICO",
+    tone: "crit" as const,
+    title: "Umbral duro cruzado",
+    body: "La computadora del auto encendió el testigo y emitió un código. A esta altura el daño ya empezó; el aviso sirve para acotarlo, no para evitarlo.",
   },
 ] as const;
+
+const toneColor = {
+  ok: "var(--fleet-ok)",
+  warn: "var(--fleet-warn)",
+  crit: "var(--fleet-crit)",
+} as const;
 
 export function ControlSignals() {
   return (
@@ -22,25 +31,41 @@ export function ControlSignals() {
       id="senales"
       className="scroll-mt-20 border-t border-[var(--fleet-border)] bg-[var(--fleet-panel)]"
     >
-      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-wide text-[var(--fleet-fg)] uppercase md:text-3xl">
-          Señales de control
-        </h2>
-        <p className="mt-3 max-w-2xl font-[family-name:var(--font-mono)] text-sm text-[var(--fleet-muted)] md:text-base">
-          Fleet Care no solo mide: convierte telemetría en señales claras para
-          operar la flota con criterio.
-        </p>
+      <div className="mx-auto max-w-[1200px] px-6 py-20 md:py-28">
+        <div className="grid gap-6 md:grid-cols-12">
+          <h2 className="font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-[-0.02em] text-balance text-[var(--fleet-fg)] md:col-span-5 md:text-4xl">
+            Tres estados, y solo uno merece susto
+          </h2>
+          <p className="max-w-[58ch] self-end text-[15px] leading-relaxed text-[var(--fleet-muted)] md:col-span-6 md:col-start-7">
+            El rojo está reservado. No es el color de la marca ni el de los
+            botones: aparece únicamente cuando algo cruzó un umbral duro. Si
+            todo grita, nada avisa.
+          </p>
+        </div>
 
-        <ul className="mt-12 grid gap-8 md:grid-cols-3">
+        <ul className="mt-14 flex flex-col">
           {signals.map((signal) => (
-            <li key={signal.code}>
-              <p className="font-[family-name:var(--font-display)] text-xs font-bold tracking-[0.28em] text-[var(--fleet-accent)] uppercase">
-                {signal.code}
-              </p>
-              <h3 className="mt-3 font-[family-name:var(--font-display)] text-lg font-bold tracking-wide text-[var(--fleet-fg)] uppercase">
+            <li
+              key={signal.code}
+              className="grid gap-3 border-t border-[var(--fleet-border)] py-8 md:grid-cols-12 md:gap-10"
+            >
+              <div className="flex items-center gap-2.5 md:col-span-3">
+                <span
+                  aria-hidden
+                  className="size-2.5 shrink-0 rounded-full"
+                  style={{ background: toneColor[signal.tone] }}
+                />
+                <span
+                  className="font-[family-name:var(--font-mono)] text-xs font-bold tracking-[0.2em] uppercase"
+                  style={{ color: toneColor[signal.tone] }}
+                >
+                  {signal.code}
+                </span>
+              </div>
+              <h3 className="font-[family-name:var(--font-display)] text-lg font-bold tracking-[-0.015em] text-[var(--fleet-fg)] md:col-span-4">
                 {signal.title}
               </h3>
-              <p className="mt-3 font-[family-name:var(--font-mono)] text-sm leading-relaxed text-[var(--fleet-muted)]">
+              <p className="max-w-[60ch] text-[15px] leading-relaxed text-[var(--fleet-muted)] md:col-span-5">
                 {signal.body}
               </p>
             </li>

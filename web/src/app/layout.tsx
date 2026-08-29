@@ -1,15 +1,21 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Space_Mono, Syncopate } from "next/font/google";
+import { Archivo, Public_Sans, Space_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
-const syncopate = Syncopate({
+const archivo = Archivo({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["600", "700", "800"],
+});
+
+const publicSans = Public_Sans({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 const spaceMono = Space_Mono({
@@ -28,9 +34,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="es"
-      className={`${syncopate.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${publicSans.variable} ${spaceMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-[family-name:var(--font-mono)]">
+      <body className="flex min-h-full flex-col font-[family-name:var(--font-body)]">
         <ClerkProvider>
           <ConvexClientProvider>
             <TooltipProvider>{children}</TooltipProvider>
