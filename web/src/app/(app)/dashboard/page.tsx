@@ -1,29 +1,85 @@
-import { Battery, Car, Gauge, Thermometer, TriangleAlert } from "lucide-react";
+"use client";
 
+import { useQuery } from "convex/react";
+import { Battery, Car, Gauge, Thermometer, TriangleAlert } from "lucide-react";
 import { StatCard } from "@/components/app/stat-card";
+import {
+  batteryHealth,
+  coolantHealth,
+  engineHealth,
+  healthBarTone,
+  healthTone,
+} from "@/components/app/vehicle-widgets";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { alerts, alertTypeLabel, devices, latest } from "@/lib/fleet-data";
+import { api } from "../../../../convex/_generated/api";
 
-const health = [
-  { label: "Combustión", score: 87, tone: "ok" as const },
-  { label: "Refrigeración", score: 34, tone: "crit" as const },
-  { label: "Eléctrico", score: 61, tone: "warn" as const },
-  { label: "Admisión", score: 92, tone: "ok" as const },
-];
-
-const barTone = {
-  ok: "bg-emerald-500",
-  warn: "bg-amber-500",
-  crit: "bg-[#dc2626]",
+const alertTypeLabel: Record<string, string> = {
+  overheat: "Sobrecalentamiento",
+  battery_undercharge: "Batería baja",
+  battery_overcharge: "Sobrecarga",
+  check_engine: "Check engine",
 };
 
 export default function DashboardPage() {
-  const activos = devices.filter((d) => d.status === "active").length;
-  const criticas = alerts.filter(
-    (a) => a.severity === "critical" && !a.resolved,
-  ).length;
+  const overview = useQuery(api.telemetry.fleetOverview);
+  const alerts = useQuery(api.alerts.active);
+
+  const readings =
+    overview?.map((o) => o.latest).filter((r) => r !== null) ?? [];
+  const activos =
+    overview?.filter((o) => o.device.status === "active").length ?? 0;
+  const criticas = alerts?.filter((a) => a.severity === "critical").length ?? 0;
+
+  const hottest = readings.reduce<{ temp: number; label: string } | null>(
+    (acc, r, i) => {
+      if (!acc || r.coolantTempC > acc.temp) {
+        return {
+          temp: r.coolantTempC,
+          label: overview?.[i]?.device.label ?? "",
+        };
+      }
+      return acc;
+    },
+    null,
+  );
+  const lowestBattery = readings.reduce<{ v: number; label: string } | null>(
+    (acc, r, i) => {
+      if (!acc || r.batteryVoltage < acc.v) {
+        return {
+          v: r.batteryVoltage,
+          label: overview?.[i]?.device.label ?? "",
+        };
+      }
+      return acc;
+    },
+    null,
+  );
+
+  const coolantScores = readings.map((r) => coolantHealth(r.coolantTempC));
+  const batteryScores = readings.map((r) => batteryHealth(r.batteryVoltage));
+  const engineScores = readings.map((r) =>
+    engineHealth(r.dtcCount, r.milStatus),
+  );
+
+  const health = [
+    {
+      label: "Refrigeración",
+      score: coolantScores.length
+        ? Math.round(Math.min(...coolantScores))
+        : 100,
+    },
+    {
+      label: "Eléctrico",
+      score: batteryScores.length
+        ? Math.round(Math.min(...batteryScores))
+        : 100,
+    },
+    {
+      label: "Motor",
+      score: engineScores.length ? Math.round(Math.min(...engineScores)) : 100,
+    },
+  ].map((h) => ({ ...h, tone: healthTone(h.score) }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,7 +96,7 @@ export default function DashboardPage() {
         <StatCard
           label="Vehículos activos"
           value={activos}
-          hint={`de ${devices.length} registrados`}
+          hint={`de ${overview?.length ?? 0} registrados`}
           icon={<Car className="size-3.5" />}
         />
         <StatCard
@@ -52,18 +108,30 @@ export default function DashboardPage() {
         />
         <StatCard
           label="Temp. máxima"
-          value={117}
-          unit="°C"
-          tone="crit"
-          hint="Hilux · Flota 03"
+          value={hottest ? hottest.temp : "—"}
+          unit={hottest ? "°C" : undefined}
+          tone={
+            hottest && hottest.temp >= 115
+              ? "crit"
+              : hottest && hottest.temp >= 105
+                ? "warn"
+                : "ok"
+          }
+          hint={hottest?.label}
           icon={<Thermometer className="size-3.5" />}
         />
         <StatCard
           label="Batería mínima"
-          value={11.8}
-          unit="V"
-          tone="warn"
-          hint="Accent · Flota 01"
+          value={lowestBattery ? lowestBattery.v.toFixed(1) : "—"}
+          unit={lowestBattery ? "V" : undefined}
+          tone={
+            lowestBattery && lowestBattery.v <= 12.2
+              ? "crit"
+              : lowestBattery && lowestBattery.v <= 13.2
+                ? "warn"
+                : "ok"
+          }
+          hint={lowestBattery?.label}
           icon={<Battery className="size-3.5" />}
         />
       </div>
@@ -85,7 +153,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
                   <div
-                    className={`h-full rounded-full ${barTone[h.tone]}`}
+                    className={`h-full rounded-full ${healthBarTone[h.tone]}`}
                     style={{ width: `${h.score}%` }}
                   />
                 </div>
@@ -99,8 +167,15 @@ export default function DashboardPage() {
             <CardTitle className="text-sm">Alertas activas</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            {alerts.map((a) => {
-              const device = devices.find((d) => d._id === a.deviceId);
+            {alerts?.length === 0 && (
+              <p className="p-4 text-center text-sm text-muted-foreground">
+                Sin alertas activas.
+              </p>
+            )}
+            {alerts?.map((a) => {
+              const device = overview?.find(
+                (o) => o.device._id === a.deviceId,
+              )?.device;
               return (
                 <div
                   key={a._id}
@@ -116,7 +191,7 @@ export default function DashboardPage() {
                   <div className="flex flex-1 flex-col gap-0.5">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs font-bold">
-                        {alertTypeLabel[a.type]}
+                        {alertTypeLabel[a.type] ?? a.type}
                       </span>
                       <Badge
                         variant={

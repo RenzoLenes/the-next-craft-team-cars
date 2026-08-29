@@ -1,3 +1,6 @@
+"use client";
+
+import { useQuery } from "convex/react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -8,9 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { devices, latest } from "@/lib/fleet-data";
+import { api } from "../../../../convex/_generated/api";
 
 export default function VehiculosPage() {
+  const overview = useQuery(api.telemetry.fleetOverview);
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -38,53 +43,74 @@ export default function VehiculosPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {devices.map((d) => {
-                  const t = latest[d._id];
-                  return (
-                    <TableRow key={d._id}>
-                      <TableCell className="font-bold">{d.label}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        {d.deviceId}
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">
-                        {t.odometerKm.toLocaleString("es-PE")} km
-                      </TableCell>
-                      <TableCell
-                        className={`text-right tabular-nums ${
-                          t.coolantTempC >= 115
-                            ? "font-bold text-[#dc2626]"
-                            : ""
-                        }`}
+                {overview === undefined && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={7}
+                      className="text-center text-sm text-muted-foreground"
+                    >
+                      Cargando…
+                    </TableCell>
+                  </TableRow>
+                )}
+                {overview?.length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={7}
+                      className="text-center text-sm text-muted-foreground"
+                    >
+                      Sin vehículos registrados — arrancá el simulador.
+                    </TableCell>
+                  </TableRow>
+                )}
+                {overview?.map(({ device, latest: t }) => (
+                  <TableRow key={device._id}>
+                    <TableCell className="font-bold">
+                      {device.label ?? device.deviceId}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">
+                      {device.deviceId}
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums">
+                      {t
+                        ? `${Math.round(t.odometerKm ?? 0).toLocaleString("es-PE")} km`
+                        : "—"}
+                    </TableCell>
+                    <TableCell
+                      className={`text-right tabular-nums ${
+                        t && t.coolantTempC >= 115
+                          ? "font-bold text-[#dc2626]"
+                          : ""
+                      }`}
+                    >
+                      {t ? `${t.coolantTempC}°C` : "—"}
+                    </TableCell>
+                    <TableCell
+                      className={`text-right tabular-nums ${
+                        t && t.batteryVoltage <= 12.2
+                          ? "font-bold text-[#dc2626]"
+                          : ""
+                      }`}
+                    >
+                      {t ? `${t.batteryVoltage.toFixed(1)} V` : "—"}
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums">
+                      {t && t.troubleCodes.length > 0
+                        ? t.troubleCodes.join(", ")
+                        : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          device.status === "active" ? "secondary" : "outline"
+                        }
+                        className="text-[10px]"
                       >
-                        {t.coolantTempC}°C
-                      </TableCell>
-                      <TableCell
-                        className={`text-right tabular-nums ${
-                          t.batteryVoltage <= 12.2
-                            ? "font-bold text-[#dc2626]"
-                            : ""
-                        }`}
-                      >
-                        {t.batteryVoltage.toFixed(1)} V
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">
-                        {t.troubleCodes.length > 0
-                          ? t.troubleCodes.join(", ")
-                          : "—"}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            d.status === "active" ? "secondary" : "outline"
-                          }
-                          className="text-[10px]"
-                        >
-                          {d.status === "active" ? "activo" : "inactivo"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        {device.status === "active" ? "activo" : "inactivo"}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </div>
