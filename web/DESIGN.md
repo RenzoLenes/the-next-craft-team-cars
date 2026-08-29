@@ -44,7 +44,7 @@ separarlos. El acento de marca se mueve a teal y el rojo queda **reservado**.
 
 ## 4. Component Stylings
 
-- **Botones:** planos, sin resplandor exterior. Relleno teal para el primario, contorno para el secundario. Feedback táctil de `-1px` en `:active`. **Un solo CTA primario por sección.**
+- **Botones:** `PillLink`, píldora con flecha en círculo, tres variantes (`dark`, `light`, `ghost`). Planos, sin resplandor exterior, feedback táctil de `-1px` en `:active`. Máximo dos por bloque: uno lleva al centro de control, el otro al simulador.
 - **Tarjetas:** esquinas de 6px, sombra difusa teñida al tono del fondo. Solo cuando la elevación comunique jerarquía; en listas densas se reemplazan por divisores de borde superior.
 - **Indicadores de estado:** un punto de color semántico + etiqueta en mono. El color nunca va solo — siempre acompañado de texto, para daltónicos y para captura de pantalla en blanco y negro.
 - **Loaders:** esqueletos que replican las dimensiones reales. Nunca spinners circulares.
@@ -61,8 +61,8 @@ separarlos. El acento de marca se mueve a teal y el rojo queda **reservado**.
 
 ## 5. Layout Principles
 
-- Hero **asimétrico**: columna de texto a la izquierda, instrumento a la derecha. Centrado prohibido.
-- La fila de **tres tarjetas iguales está prohibida**. En su lugar: zig-zag de dos columnas o rejilla asimétrica donde el peso visual comunique prioridad.
+- Hero **asimétrico**: titular abajo a la izquierda, datos en las esquinas opuestas, texto explicativo abajo a la derecha. El único bloque centrado de la página es el cierre.
+- Filas de tarjetas iguales solo en la sección de integración (§4b). En el resto: dos columnas o rejilla asimétrica donde el peso visual comunique prioridad.
 - CSS Grid antes que aritmética de flexbox. Sin `calc()` de porcentajes.
 - Contención a `max-width: 1200px` centrado.
 - Alto completo con `min-h-[100dvh]`, nunca `h-screen`.
@@ -77,10 +77,10 @@ separarlos. El acento de marca se mueve a teal y el rojo queda **reservado**.
 
 ## 7. Anti-Patterns (Banned)
 
-- **Datos inventados.** El `99.2%` del hero actual no sale de ninguna medición: es relleno. Si no hay dato real, no hay cifra.
+- **Datos inventados.** Si una cifra no sale del código o de una medición, no va. Las de la referencia (`98.4%`, `3 Mins`, `412.8 TB`) son relleno.
 - Rojo como color de marca (colisiona con el semántico crítico).
-- Filas de tres tarjetas idénticas.
-- Dos CTAs compitiendo en el hero.
+- Tarjetas idénticas fuera de la sección de integración.
+- Más de dos CTAs en un mismo bloque.
 - Prosa larga en monoespaciada.
 - Titulares largos en mayúsculas con tracking abierto.
 - Marca repetida dos veces seguidas (un `<p>` con el nombre justo encima del `<h1>`).

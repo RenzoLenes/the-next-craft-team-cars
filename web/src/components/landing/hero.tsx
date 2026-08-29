@@ -16,8 +16,15 @@ export function Hero() {
   return (
     <section className="relative isolate min-h-[100dvh] overflow-hidden bg-[#0b1114]">
       {/* Dron sobre un bus en curva de bosque — Pexels, Oskar Gross. Transcodificado y servido local. */}
-      <video
+      {/* Con prefers-reduced-motion el video se oculta y queda el fotograma fijo. */}
+      <img
+        src="/hero-poster.jpg"
+        alt=""
+        aria-hidden
         className="absolute inset-0 size-full object-cover"
+      />
+      <video
+        className="absolute inset-0 size-full object-cover motion-reduce:hidden"
         src="/hero.mp4"
         poster="/hero-poster.jpg"
         autoPlay
