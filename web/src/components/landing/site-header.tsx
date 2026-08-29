@@ -1,3 +1,9 @@
+import {
+  SignInButton,
+  SignUpButton,
+  Show,
+  UserButton,
+} from "@clerk/nextjs";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -23,15 +29,42 @@ export function SiteHeader() {
           >
             Demo
           </a>
-          <a
-            href="#cta"
-            className={cn(
-              buttonVariants({ size: "sm" }),
-              "cursor-pointer bg-[var(--signal-accent)] text-white hover:bg-[var(--signal-accent)]/90"
-            )}
-          >
-            Empezar
-          </a>
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "cursor-pointer text-[var(--signal-muted)]"
+                )}
+              >
+                Entrar
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button
+                type="button"
+                className={cn(
+                  buttonVariants({ size: "sm" }),
+                  "cursor-pointer bg-[var(--signal-accent)] text-white hover:bg-[var(--signal-accent)]/90"
+                )}
+              >
+                Empezar
+              </button>
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
+            <Link
+              href="/dashboard"
+              className={cn(
+                buttonVariants({ size: "sm" }),
+                "cursor-pointer bg-[var(--signal-accent)] text-white hover:bg-[var(--signal-accent)]/90"
+              )}
+            >
+              Consola
+            </Link>
+            <UserButton />
+          </Show>
         </nav>
       </div>
     </header>
