@@ -1,0 +1,9 @@
+{
+  "name": "the-next-craft-team-cars",
+  "private": true,
+  "workspaces": [
+    "web",
+    "simulator/generator",
+    "simulator/control-panel"
+  ]
+}
