@@ -1,6 +1,11 @@
 "use client";
 
-import { ContactShadows, Environment, OrbitControls } from "@react-three/drei";
+import {
+  ContactShadows,
+  Environment,
+  Lightformer,
+  OrbitControls,
+} from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 
 import type { CarMetrics } from "./metrics";
@@ -39,7 +44,33 @@ export function SimulatorScene({ metrics, reducedMotion }: SimulatorSceneProps) 
         blur={2.2}
         far={4}
       />
-      <Environment preset="city" />
+      {/*
+        Entorno procedural en vez de `preset="city"`: el preset descarga un HDR de
+        1,5 MB desde jsdelivr en tiempo de ejecución y, mientras llega, Suspense
+        deja toda la escena en blanco. Con wifi lento no llega nunca.
+      */}
+      <Environment resolution={256}>
+        <Lightformer
+          intensity={2.2}
+          position={[0, 5, -6]}
+          scale={[12, 4, 1]}
+          color="#f4f7fa"
+        />
+        <Lightformer
+          intensity={1.4}
+          position={[-6, 3, 2]}
+          rotation-y={Math.PI / 2}
+          scale={[8, 3, 1]}
+          color="#dfe8ee"
+        />
+        <Lightformer
+          intensity={1.1}
+          position={[6, 2, 2]}
+          rotation-y={-Math.PI / 2}
+          scale={[8, 3, 1]}
+          color="#e9eef2"
+        />
+      </Environment>
       <OrbitControls
         enablePan={false}
         minDistance={3.5}
