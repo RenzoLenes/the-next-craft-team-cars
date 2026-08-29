@@ -1,13 +1,9 @@
-import Image from "next/image";
+import { PillLink } from "@/components/landing/pill-link";
 
-/** Bus al anochecer — Unsplash. Verificada antes de fijarla. */
-const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=2400&q=72";
-
-/** Lecturas numéricas por muestra, contadas del schema de telemetryReadings. */
-const SIGNAL_COUNT = 12;
 /** Cadencia real del generador (simulator/generator/src/generator.ts). */
 const SAMPLE_RATE = "1,5 s";
+/** Campos numéricos por lectura, contados del schema de telemetryReadings. */
+const SIGNAL_COUNT = 12;
 
 const readings = [
   "Ajuste de combustible",
@@ -19,60 +15,60 @@ const readings = [
 export function Hero() {
   return (
     <section className="relative isolate min-h-[100dvh] overflow-hidden bg-[#0b1114]">
-      <Image
-        src={HERO_IMAGE}
-        alt="Un bus detenido al anochecer con los faros encendidos, en una carretera de montaña"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
+      {/* Dron sobre un bus en curva de bosque — Pexels, Oskar Gross. Transcodificado y servido local. */}
+      <video
+        className="absolute inset-0 size-full object-cover"
+        src="/hero.mp4"
+        poster="/hero-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,20,0.72)_0%,rgba(11,17,20,0.34)_38%,rgba(11,17,20,0.86)_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,17,20,0.66)_0%,rgba(11,17,20,0.28)_40%,rgba(11,17,20,0.82)_100%)]"
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-[1200px] flex-col justify-end px-6 pt-32 pb-10 md:pb-14">
-        {/* dato superior derecho */}
-        <div className="pointer-events-none absolute top-28 right-6 hidden text-right md:block">
-          <p className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-[-0.02em] text-white lg:text-4xl">
-            {SAMPLE_RATE}
-          </p>
-          <p className="font-[family-name:var(--font-mono)] mt-1 text-[11px] tracking-[0.14em] text-white/60 uppercase">
-            Frecuencia de muestreo
-          </p>
-        </div>
-
-        <div className="max-w-3xl">
-          <h1 className="font-[family-name:var(--font-display)] text-[2.6rem] leading-[0.98] font-extrabold tracking-[-0.03em] text-balance text-white sm:text-6xl lg:text-7xl">
-            El testigo se enciende
-            <span className="block text-white/55">cuando ya es tarde.</span>
-          </h1>
-
-          <div className="mt-8 flex flex-wrap gap-2.5">
-            <a
-              href="#cta"
-              className="group inline-flex items-center gap-2.5 rounded-full bg-white py-2.5 pr-2.5 pl-5 text-sm font-semibold text-[#0b1114] transition-transform active:translate-y-px"
-            >
-              Acceder al centro de control
-              <span className="inline-flex size-7 items-center justify-center rounded-full bg-[var(--fleet-accent)] text-white transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-                <Arrow />
-              </span>
-            </a>
-            <a
-              href="#simulador"
-              className="group inline-flex items-center gap-2.5 rounded-full border border-white/25 py-2.5 pr-2.5 pl-5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10 active:translate-y-px"
-            >
-              Ver el simulador
-              <span className="inline-flex size-7 items-center justify-center rounded-full bg-white/15 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-                <Arrow />
-              </span>
-            </a>
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-[1200px] flex-col justify-between px-6 pt-32 pb-8 md:pb-10">
+        {/* ── dato superior derecho, con línea guía punteada ── */}
+        <div className="hidden justify-end md:flex">
+          <div className="w-full max-w-sm text-right">
+            <p className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-[-0.02em] text-white lg:text-5xl">
+              {SAMPLE_RATE}
+            </p>
+            <p className="font-[family-name:var(--font-mono)] mt-1 text-[11px] tracking-[0.14em] text-white/60 uppercase">
+              Frecuencia de muestreo
+            </p>
+            <div className="mt-4 flex items-center justify-end gap-0">
+              <span aria-hidden className="size-1.5 rounded-full bg-white/70" />
+              <span
+                aria-hidden
+                className="h-px w-full border-t border-dotted border-white/45"
+              />
+            </div>
           </div>
         </div>
 
-        {/* fila inferior: dato + explicacion */}
-        <div className="mt-14 grid gap-8 border-t border-white/15 pt-8 md:grid-cols-[auto_1fr] md:gap-16">
+        {/* ── bloque central: titular + CTAs ── */}
+        <div className="-mt-6 md:-mt-16">
+          <h1 className="font-[family-name:var(--font-display)] max-w-[14ch] text-[2.6rem] leading-[0.98] font-semibold tracking-[-0.03em] text-balance text-white sm:text-6xl lg:text-[4.6rem]">
+            El testigo se enciende cuando ya es tarde.
+          </h1>
+          <div className="mt-7 flex flex-wrap gap-2.5">
+            <PillLink href="/dashboard" variant="light">
+              Acceder al centro de control
+            </PillLink>
+            <PillLink href="#simulador" variant="ghost">
+              Ver el simulador
+            </PillLink>
+          </div>
+        </div>
+
+        {/* ── fila inferior: dato con guía + texto con regla vertical + chips ── */}
+        <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-end md:gap-16">
           <div>
             <p className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-[-0.02em] text-white lg:text-5xl">
               {SIGNAL_COUNT}
@@ -80,46 +76,42 @@ export function Hero() {
             <p className="font-[family-name:var(--font-mono)] mt-1 text-[11px] tracking-[0.14em] text-white/60 uppercase">
               Señales por lectura
             </p>
+            <div className="mt-4 hidden items-center md:flex">
+              <span
+                aria-hidden
+                className="h-px w-full border-t border-dotted border-white/45"
+              />
+              <span aria-hidden className="size-1.5 rounded-full bg-white/70" />
+            </div>
+            <ul className="mt-10 flex flex-wrap gap-2">
+              {readings.map((reading) => (
+                <li
+                  key={reading}
+                  className="rounded-md border border-white/20 bg-white/5 px-3.5 py-1.5 text-[12px] text-white/85 backdrop-blur-sm"
+                >
+                  {reading}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="max-w-[62ch] md:justify-self-end">
-            <p className="text-[15px] leading-relaxed text-white/75">
-              Cada unidad lleva un dispositivo en el puerto OBD-II. Fleet Care
+
+          <div className="relative max-w-[52ch] md:border-l md:border-dotted md:border-white/45 md:pl-6">
+            <span
+              aria-hidden
+              className="absolute -top-1 -left-[3.5px] hidden size-1.5 rounded-full bg-white/70 md:block"
+            />
+            <p className="font-[family-name:var(--font-display)] text-lg font-medium tracking-[-0.01em] text-white">
+              Lee cada unidad. Avisa antes del testigo.
+            </p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/72">
+              Cada bus lleva un dispositivo en el puerto OBD-II. Fleet Care
               aprende cómo se comporta un motor sano y avisa en cuanto uno deja
               de parecerse a sí mismo: semanas antes de que se encienda un
-              testigo, y mucho antes de que el bus quede varado con pasajeros
-              dentro.
+              testigo, y mucho antes de que quede varado con pasajeros dentro.
             </p>
           </div>
         </div>
-
-        <ul className="mt-8 flex flex-wrap gap-2">
-          {readings.map((reading) => (
-            <li
-              key={reading}
-              className="font-[family-name:var(--font-mono)] rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[11px] tracking-wide text-white/80 backdrop-blur-sm"
-            >
-              {reading}
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
-  );
-}
-
-function Arrow() {
-  return (
-    <svg
-      viewBox="0 0 12 12"
-      className="size-3"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M3 9L9 3M9 3H4.5M9 3v4.5" />
-    </svg>
   );
 }

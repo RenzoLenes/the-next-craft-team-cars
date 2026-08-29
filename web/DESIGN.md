@@ -49,6 +49,16 @@ separarlos. El acento de marca se mueve a teal y el rojo queda **reservado**.
 - **Indicadores de estado:** un punto de color semántico + etiqueta en mono. El color nunca va solo — siempre acompañado de texto, para daltónicos y para captura de pantalla en blanco y negro.
 - **Loaders:** esqueletos que replican las dimensiones reales. Nunca spinners circulares.
 
+## 4b. Dirección fotográfica (referencia AeroCrop.ai)
+
+- **Hero en video** a sangre completa con overlay oscuro en degradado; la barra de navegación flota en píldora con desenfoque. Titular en la mitad inferior izquierda. Dos datos con **línea guía punteada** (uno arriba a la derecha, uno abajo a la izquierda), un bloque de texto con regla vertical punteada, y chips de lecturas al pie.
+- **CTA en píldora con flecha en círculo** (`PillLink`), tres variantes: `dark`, `light`, `ghost`. Es el único estilo de botón de la landing.
+- **Sección de lecturas**: dos columnas (titular / prosa), y debajo una banda fotográfica oscurecida que contiene dos tarjetas blancas, cada una mitad foto y mitad dato con píldora de estado.
+- **Sección de integración**: tres tarjetas con foto 4:3, etiqueta en píldora del color de acento, título y cuerpo. Es la única excepción autorizada a la prohibición de tres tarjetas iguales, por petición explícita.
+- **Cierre**: titular centrado sobre una foto que se funde desde el fondo claro; debajo, tarjeta de estado con datos verificables y pie de cuatro columnas claro.
+- **Toda foto y video se inspecciona a ojo antes de fijarlo.** Un `200` solo dice que el enlace existe. Se descartan imágenes con marcas ajenas visibles.
+- **Cifras**: solo las que salen del código (`1,5 s` de muestreo, `12` señales por lectura, umbrales de `telemetry.ts`). Nunca las de la referencia.
+
 ## 5. Layout Principles
 
 - Hero **asimétrico**: columna de texto a la izquierda, instrumento a la derecha. Centrado prohibido.
