@@ -24,28 +24,28 @@ export function Hero() {
           </p>
 
           <h1 className="font-[family-name:var(--font-display)] text-4xl leading-[1.05] font-extrabold tracking-[-0.025em] text-balance text-[var(--fleet-fg)] sm:text-5xl md:text-[3.4rem]">
-            El tablero avisa cuando ya se rompió.
+            El tablero avisa cuando la unidad ya se rompió.
             <span className="mt-2 block text-[var(--fleet-accent)]">
               Nosotros, antes.
             </span>
           </h1>
 
           <p className="mt-6 max-w-[54ch] text-[15px] leading-relaxed text-[var(--fleet-muted)] md:text-base">
-            Un dispositivo lee el puerto OBD-II de cada vehículo. Fleet Care
-            aprende cómo se comporta el motor cuando está sano y avisa en cuanto
-            deja de parecerse a sí mismo, semanas antes de que la computadora
-            del auto encienda una luz.
+            Cada unidad lleva un dispositivo en el puerto OBD-II. Fleet Care
+            aprende cómo se comporta un motor sano y avisa en cuanto uno deja de
+            parecerse a sí mismo: semanas antes de que se encienda un testigo, y
+            mucho antes de que el bus quede varado con pasajeros dentro.
           </p>
 
           <div className="mt-9">
             <a
-              href="#simulador"
+              href="#cta"
               className={cn(
                 buttonVariants({ size: "lg" }),
                 "cursor-pointer bg-[var(--fleet-accent)] px-6 text-white hover:bg-[var(--fleet-accent)]/90",
               )}
             >
-              Ver el simulador
+              Acceder al centro de control
             </a>
           </div>
         </div>

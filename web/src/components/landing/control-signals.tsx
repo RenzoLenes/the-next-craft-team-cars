@@ -9,13 +9,13 @@ const signals = [
     code: "DESVIACIÓN",
     tone: "warn" as const,
     title: "Ya no se parece a sí mismo",
-    body: "El motor se aparta de su propio patrón de forma sostenida. Todavía no hay código de falla ni luz en el tablero. Esta es la ventana donde una reparación es barata.",
+    body: "El motor se aparta de su propio patrón de forma sostenida. Todavía no hay código de falla ni testigo encendido. Esta es la ventana donde la reparación es barata y la unidad sigue en ruta.",
   },
   {
     code: "CRÍTICO",
     tone: "crit" as const,
     title: "Umbral duro cruzado",
-    body: "La computadora del auto encendió el testigo y emitió un código. A esta altura el daño ya empezó; el aviso sirve para acotarlo, no para evitarlo.",
+    body: "La computadora de a bordo encendió el testigo y emitió un código. A esta altura el daño ya empezó: el aviso sirve para sacar la unidad de servicio a tiempo, no para evitarlo.",
   },
 ] as const;
 

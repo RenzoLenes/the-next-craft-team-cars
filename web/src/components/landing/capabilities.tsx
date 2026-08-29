@@ -2,17 +2,17 @@ const capabilities = [
   {
     kicker: "Lectura",
     title: "Habla OBD-II, no un formato inventado",
-    body: "El dispositivo lee los PID reales del modo 01: régimen del motor, carga calculada, flujo de aire, ajuste de combustible, voltaje. Los mismos que consulta un escáner de taller.",
+    body: "El dispositivo lee los PID reales del modo 01: régimen del motor, carga calculada, flujo de aire, ajuste de combustible, voltaje. Los mismos que consulta un escáner de taller, en cada unidad de la flota.",
   },
   {
     kicker: "Aprendizaje",
-    title: "Aprende qué es normal para tu auto",
-    body: "Un umbral fijo grita en cuesta arriba y calla cuando un motor que suele ir en -8 se va a +9. El modelo compara contra lo esperado para esa velocidad, carga y temperatura, no contra un número de tabla.",
+    title: "Aprende qué es normal para cada unidad",
+    body: "Un umbral fijo grita en cuesta arriba y calla cuando un motor que suele ir en -8 se va a +9. El modelo compara contra lo esperado para esa velocidad, carga y temperatura, no contra un número de tabla igual para toda la flota.",
   },
   {
     kicker: "Traducción",
     title: "Y lo dice en castellano",
-    body: "Un código de falla es una sigla. Fleet Care responde lo que de verdad se pregunta el dueño en el semáforo: qué pasa, si puede seguir manejando, y cuánto cuesta ahora frente a cuánto costará después.",
+    body: "Un código de falla es una sigla. Fleet Care responde lo que de verdad necesita saber el jefe de operaciones: qué le pasa a la unidad, si puede terminar la ruta, y cuánto cuesta atenderlo hoy frente a cuánto cuesta un bus parado.",
   },
 ] as const;
 
@@ -37,7 +37,7 @@ export function Capabilities() {
     >
       <div className="mx-auto max-w-[1200px] px-6 py-20 md:py-28">
         <h2 className="font-[family-name:var(--font-display)] max-w-[18ch] text-3xl font-extrabold tracking-[-0.02em] text-balance text-[var(--fleet-fg)] md:text-4xl">
-          Tres pasos entre un sensor y una decisión
+          Tres pasos entre un sensor y una unidad que no se detiene
         </h2>
 
         <ol className="mt-16 flex flex-col gap-14 md:gap-20">
