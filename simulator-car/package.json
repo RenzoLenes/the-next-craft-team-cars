@@ -3,7 +3,6 @@
   "private": true,
   "workspaces": [
     "web",
-    "simulator/generator",
-    "simulator/control-panel"
+    "simulator/generator"
   ]
 }

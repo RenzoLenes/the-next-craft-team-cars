@@ -10,6 +10,7 @@
 
 import type * as alerts from "../alerts.js";
 import type * as devices from "../devices.js";
+import type * as health from "../health.js";
 import type * as maintenance from "../maintenance.js";
 import type * as telemetry from "../telemetry.js";
 
@@ -22,6 +23,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   alerts: typeof alerts;
   devices: typeof devices;
+  health: typeof health;
   maintenance: typeof maintenance;
   telemetry: typeof telemetry;
 }>;
