@@ -15,7 +15,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link
           href="/"
-          className="font-[family-name:var(--font-display)] text-sm font-bold tracking-[0.12em] text-[var(--fleet-fg)] uppercase transition-opacity duration-200 hover:opacity-70"
+          className="font-[family-name:var(--font-display)] text-sm font-bold tracking-[0.12em] text-white uppercase transition-opacity duration-200 hover:opacity-70"
         >
           Fleet <span className="text-[var(--fleet-accent)]">Care</span>
         </Link>
@@ -24,7 +24,7 @@ export function SiteHeader() {
             href="#capacidades"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "cursor-pointer text-[var(--fleet-muted)]"
+              "cursor-pointer text-white/70 hover:text-white"
             )}
           >
             Monitoreo
@@ -33,7 +33,7 @@ export function SiteHeader() {
             href="#senales"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "cursor-pointer text-[var(--fleet-muted)]"
+              "cursor-pointer text-white/70 hover:text-white"
             )}
           >
             Alertas
@@ -42,7 +42,7 @@ export function SiteHeader() {
             href="#senales"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "cursor-pointer text-[var(--fleet-muted)]"
+              "cursor-pointer text-white/70 hover:text-white"
             )}
           >
             Seguridad
@@ -53,7 +53,7 @@ export function SiteHeader() {
             href="#simulador"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "cursor-pointer text-[var(--fleet-muted)]"
+              "cursor-pointer text-white/70 hover:text-white"
             )}
           >
             Simulador
@@ -64,7 +64,7 @@ export function SiteHeader() {
                 type="button"
                 className={cn(
                   buttonVariants({ variant: "ghost", size: "sm" }),
-                  "cursor-pointer text-[var(--fleet-muted)]"
+                  "cursor-pointer text-white/70 hover:text-white"
                 )}
               >
                 Entrar
@@ -75,7 +75,7 @@ export function SiteHeader() {
                 type="button"
                 className={cn(
                   buttonVariants({ size: "sm" }),
-                  "cursor-pointer bg-[var(--fleet-accent)] text-white hover:bg-[var(--fleet-accent)]/90"
+                  "cursor-pointer rounded-full bg-white px-4 text-[#0b1114] hover:bg-white/90"
                 )}
               >
                 Comenzar
@@ -87,7 +87,7 @@ export function SiteHeader() {
               href="/dashboard"
               className={cn(
                 buttonVariants({ size: "sm" }),
-                "cursor-pointer bg-[var(--fleet-accent)] text-white hover:bg-[var(--fleet-accent)]/90"
+                "cursor-pointer rounded-full bg-white px-4 text-[#0b1114] hover:bg-white/90"
               )}
             >
               Consola
