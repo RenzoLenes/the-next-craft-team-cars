@@ -101,7 +101,7 @@ export function SiteFooter() {
         />
         <FooterColumn
           title="Créditos"
-          links={["Video: Oskar Gross, Pexels", "Fotografías: Unsplash"]}
+          links={["Fotografías: Unsplash"]}
         />
       </div>
 

@@ -5,7 +5,7 @@ const items = [
     tag: "Dispositivo",
     title: "Un lector OBD-II por unidad",
     body: "Se conecta al puerto de diagnóstico que toda unidad fabricada después de 2008 ya trae. Lee los PID del modo 01 y los códigos del modo 03 cada 1,5 segundos, sin cableado nuevo.",
-    image: "/hero-poster.jpg",
+    image: "/aerial-bus.jpg",
     alt: "Vista aérea de un bus tomando una curva en una carretera de bosque",
   },
   {

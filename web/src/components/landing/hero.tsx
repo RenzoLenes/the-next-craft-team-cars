@@ -17,7 +17,7 @@ const readings = [
 export function Hero() {
   return (
     <section className="relative isolate min-h-[100dvh] overflow-hidden bg-[#0b1114]">
-      {/* Dron sobre un bus en curva de bosque — Pexels, Oskar Gross. Transcodificado y servido local. */}
+      {/* Auto en marcha por carretera de bosque — video aportado por el equipo. Transcodificado a 540p y servido local. */}
       {/* Con prefers-reduced-motion el video se oculta y queda el fotograma fijo. */}
       <Image
         src="/hero-poster.jpg"
