@@ -19,9 +19,9 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Señal — Control de métricas de autos",
+  title: "Fleet Care — Monitoreo IoT y señales de control",
   description:
-    "Consola para controlar métricas de autos y emitir señales de control operativas.",
+    "Supervisa en tiempo real las métricas de tu flota de autos, recibe alertas y emite señales de control operativas.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
