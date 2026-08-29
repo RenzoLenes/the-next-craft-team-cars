@@ -14,11 +14,20 @@ const FAULTS: { value: FaultKey; label: string }[] = [
   { value: "check_engine", label: "Check engine" },
 ];
 
+type DriveMode = "city" | "highway";
+
+const MODES: { value: DriveMode; label: string }[] = [
+  { value: "city", label: "Ciudad (15-55 km/h)" },
+  { value: "highway", label: "Carretera (70-130 km/h)" },
+];
+
 type SimDevice = {
   deviceId: string;
   vin: string;
   label: string;
   running: boolean;
+  mode: DriveMode;
+  speedKmh: number;
   fault: FaultKey;
   faultProgress: number;
 };
@@ -153,7 +162,7 @@ function VehicleCard({
           }`}
         >
           <span className={`h-1.5 w-1.5 rounded-full ${device.running ? "bg-emerald-500" : "bg-neutral-400"}`} />
-          {device.running ? "Corriendo" : "Detenido"}
+          {device.running ? `Corriendo · ${device.speedKmh} km/h` : "Detenido"}
         </span>
       </div>
 
@@ -173,6 +182,22 @@ function VehicleCard({
           {isPending("stop") ? "…" : "■ Stop"}
         </button>
       </div>
+
+      <label htmlFor={`mode-${device.deviceId}`} className="text-xs font-medium text-neutral-500 block mb-1.5">
+        Modo de manejo
+      </label>
+      <select
+        id={`mode-${device.deviceId}`}
+        value={device.mode}
+        onChange={(e) => onCall("mode", "/mode", { mode: e.target.value })}
+        className="text-sm border border-neutral-200 rounded-lg px-3 py-2 w-full bg-white text-neutral-700 mb-4"
+      >
+        {MODES.map((m) => (
+          <option key={m.value} value={m.value}>
+            {m.label}
+          </option>
+        ))}
+      </select>
 
       <div className="flex items-center justify-between mb-1.5">
         <label htmlFor={`fault-${device.deviceId}`} className="text-xs font-medium text-neutral-500">

@@ -22,6 +22,75 @@ const maintenanceVariant: Record<
   ok: "outline",
 };
 
+function ArcGauge({
+  value,
+  min,
+  max,
+  size = 92,
+  strokeWidth = 9,
+  label,
+  displayValue,
+  critical,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  size?: number;
+  strokeWidth?: number;
+  label: string;
+  displayValue: string;
+  critical?: boolean;
+}) {
+  const r = (size - strokeWidth) / 2;
+  const cx = size / 2;
+  const cy = r + strokeWidth / 2;
+  const height = r + strokeWidth;
+  const t = Math.min(1, Math.max(0, (value - min) / (max - min)));
+
+  const pointAt = (tt: number) => {
+    const angle = Math.PI * (1 - tt);
+    return { x: cx + r * Math.cos(angle), y: cy - r * Math.sin(angle) };
+  };
+  const start = pointAt(0);
+  const end = pointAt(1);
+  const mid = pointAt(t);
+  const bgPath = `M ${start.x} ${start.y} A ${r} ${r} 0 1 1 ${end.x} ${end.y}`;
+  const fgPath = `M ${start.x} ${start.y} A ${r} ${r} 0 ${t > 0.5 ? 1 : 0} 1 ${mid.x} ${mid.y}`;
+
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <svg
+        width={size}
+        height={height}
+        viewBox={`0 0 ${size} ${height}`}
+        role="img"
+        aria-label={`${label}: ${displayValue}`}
+      >
+        <path
+          d={bgPath}
+          fill="none"
+          stroke="var(--border)"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+        />
+        {t > 0 && (
+          <path
+            d={fgPath}
+            fill="none"
+            stroke={critical ? "var(--destructive)" : "var(--foreground)"}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+          />
+        )}
+      </svg>
+      <span className="-mt-4 font-mono text-sm">{displayValue}</span>
+      <span className="text-[10px] tracking-wide text-muted-foreground uppercase">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 function formatEta(hours: number | null): string | null {
   if (hours === null) return null;
   if (hours < 1) return `~${Math.round(hours * 60)} min`;
@@ -139,19 +208,41 @@ function VehicleCard({
 
         {latest && (
           <>
+            <div className="grid grid-cols-3 gap-1">
+              <ArcGauge
+                label="Velocidad"
+                displayValue={`${latest.vehicleSpeedKmh} km/h`}
+                value={latest.vehicleSpeedKmh}
+                min={0}
+                max={180}
+              />
+              <ArcGauge
+                label="Combustible"
+                displayValue={`${latest.fuelLevelPct.toFixed(0)}%`}
+                value={latest.fuelLevelPct}
+                min={0}
+                max={100}
+                critical={latest.fuelLevelPct < 15}
+              />
+              <ArcGauge
+                label="Batería"
+                displayValue={`${latest.batteryVoltage.toFixed(1)} V`}
+                value={latest.batteryVoltage}
+                min={11}
+                max={16}
+                critical={
+                  latest.batteryVoltage < 12.2 || latest.batteryVoltage > 15
+                }
+              />
+            </div>
+
             <dl className="grid grid-cols-3 gap-x-3 gap-y-2 text-sm">
               <Stat label="RPM" value={String(latest.engineRpm)} />
-              <Stat
-                label="Velocidad"
-                value={`${latest.vehicleSpeedKmh} km/h`}
-              />
               <Stat
                 label="Odómetro"
                 value={`${(latest.odometerKm ?? 0).toFixed(0)} km`}
               />
               <Stat label="Refrigerante" value={`${latest.coolantTempC}°C`} />
-              <Stat label="Batería" value={`${latest.batteryVoltage} V`} />
-              <Stat label="Combustible" value={`${latest.fuelLevelPct}%`} />
             </dl>
 
             {chartData.length >= 5 && (

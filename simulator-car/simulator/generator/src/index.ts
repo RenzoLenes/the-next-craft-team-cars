@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { convex, api } from "./convexClient.js";
-import { createDevice, tick, type FaultType, type SimDevice } from "./generator.js";
+import { createDevice, tick, type DriveMode, type FaultType, type SimDevice } from "./generator.js";
 
 const PORT = Number(process.env.PORT ?? 4000);
 const TICK_MS = Number(process.env.TICK_MS ?? 1500);
@@ -14,6 +14,8 @@ const FAULT_TYPES: FaultType[] = [
   "battery_overcharge",
   "check_engine",
 ];
+
+const DRIVE_MODES: DriveMode[] = ["city", "highway"];
 
 const devices = new Map<string, SimDevice>();
 
@@ -37,7 +39,7 @@ async function pushReading(device: SimDevice) {
 
 setInterval(() => {
   for (const device of devices.values()) {
-    if (device.running || device.faultProgress > 0) {
+    if (device.running || device.faultProgress > 0 || device.currentSpeedKmh > 0) {
       void pushReading(device);
     }
   }
@@ -53,6 +55,8 @@ function serializeDevice(d: SimDevice) {
     vin: d.vin,
     label: d.label,
     running: d.running,
+    mode: d.mode,
+    speedKmh: Math.round(d.currentSpeedKmh),
     fault: d.fault,
     faultProgress: Number(d.faultProgress.toFixed(2)),
   };
@@ -84,6 +88,17 @@ app.post("/devices/:deviceId/stop", (req, res) => {
   const device = devices.get(req.params.deviceId);
   if (!device) return res.status(404).json({ error: "device no encontrado" });
   device.running = false;
+  res.json(serializeDevice(device));
+});
+
+app.post("/devices/:deviceId/mode", (req, res) => {
+  const device = devices.get(req.params.deviceId);
+  if (!device) return res.status(404).json({ error: "device no encontrado" });
+  const { mode } = req.body ?? {};
+  if (!DRIVE_MODES.includes(mode)) {
+    return res.status(400).json({ error: `mode debe ser uno de: ${DRIVE_MODES.join(", ")}` });
+  }
+  device.mode = mode;
   res.json(serializeDevice(device));
 });
 

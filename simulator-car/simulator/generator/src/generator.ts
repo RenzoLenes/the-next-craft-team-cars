@@ -5,11 +5,16 @@ export type FaultType =
   | "battery_overcharge"
   | "check_engine";
 
+export type DriveMode = "city" | "highway";
+
 export interface SimDevice {
   deviceId: string;
   vin: string;
   label: string;
   running: boolean;
+  mode: DriveMode;
+  cruiseTargetKmh: number; // deriva lento dentro del rango del modo — el "objetivo" del conductor
+  currentSpeedKmh: number; // se acerca al target con un límite de aceleración, no salta
   fault: FaultType;
   faultProgress: number; // 0..1 — avanza mientras el fallo está activo, retrocede al limpiarlo
   fuelLevelPct: number; // decrece lentamente y persiste entre ticks
@@ -21,6 +26,11 @@ export interface SimDevice {
 
 const FAULT_STEP = 1 / 30; // ~30 ticks para llegar a severidad máxima (30 * 1.5s ≈ 45s)
 const RECOVERY_STEP = 1 / 15; // recupera más rápido que degrada, para demo
+
+const MODE_BOUNDS: Record<DriveMode, { min: number; max: number; maxAccel: number }> = {
+  city: { min: 15, max: 55, maxAccel: 4 },
+  highway: { min: 70, max: 130, maxAccel: 7 },
+};
 
 const TROUBLE_CODES: Record<string, string[]> = {
   overheat: ["P0128", "P0217"],
@@ -40,6 +50,9 @@ export function createDevice(
     vin,
     label,
     running: false,
+    mode: "city",
+    cruiseTargetKmh: 0,
+    currentSpeedKmh: 0,
     fault: "none",
     faultProgress: 0,
     fuelLevelPct: 78,
@@ -89,16 +102,31 @@ export function tick(device: SimDevice): TelemetryPayload {
     device.faultProgress = clamp(device.faultProgress - RECOVERY_STEP, 0, 1);
   }
 
+  // velocidad con inercia: el objetivo de crucero deriva lento dentro del modo,
+  // y la velocidad actual lo persigue con un límite de aceleración — un trazo
+  // continuo (como manejar de verdad), no un valor independiente por tick.
+  if (device.running) {
+    const bounds = MODE_BOUNDS[device.mode];
+    device.cruiseTargetKmh = clamp(device.cruiseTargetKmh + noise(4), bounds.min, bounds.max);
+    const delta = clamp(device.cruiseTargetKmh - device.currentSpeedKmh, -bounds.maxAccel, bounds.maxAccel);
+    device.currentSpeedKmh = clamp(device.currentSpeedKmh + delta + noise(1), 0, bounds.max + 10);
+  } else {
+    device.cruiseTargetKmh = 0;
+    device.currentSpeedKmh = clamp(device.currentSpeedKmh - 8, 0, 200);
+  }
+  const speedKmh = device.currentSpeedKmh;
+
   // movimiento simulado (random walk pequeño alrededor del punto base)
   device.headingDeg = (device.headingDeg + noise(15) + 360) % 360;
-  const speedKmh = device.running ? 40 + noise(25) : 0;
   const metersPerTick = (speedKmh / 3.6) * 1.5; // tick ≈ 1.5s
   const degPerMeter = 1 / 111_320;
   device.lat += Math.cos((device.headingDeg * Math.PI) / 180) * metersPerTick * degPerMeter;
   device.lon += Math.sin((device.headingDeg * Math.PI) / 180) * metersPerTick * degPerMeter;
   device.odometerKm += metersPerTick / 1000;
 
-  const engineRpm = device.running ? clamp(1500 + noise(500), 700, 4500) : clamp(800 + noise(50), 0, 900);
+  const engineRpm = device.running
+    ? clamp(900 + speedKmh * 12 + noise(150), 700, 4500)
+    : clamp(800 + noise(50), 0, 900);
   const engineLoadPct = clamp((speedKmh / 120) * 100 + noise(8), 0, 100);
   const throttlePositionPct = clamp(engineLoadPct * 0.8 + noise(5), 0, 100);
 
