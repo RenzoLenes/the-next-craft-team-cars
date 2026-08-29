@@ -9,28 +9,57 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link
           href="/"
-          className="font-[family-name:var(--font-display)] text-sm font-bold tracking-[0.2em] text-[var(--signal-fg)] uppercase transition-opacity duration-200 hover:opacity-70"
+          className="font-[family-name:var(--font-display)] text-sm font-bold tracking-[0.12em] text-[var(--fleet-fg)] uppercase transition-opacity duration-200 hover:opacity-70"
         >
-          Señal
+          Fleet <span className="text-[var(--fleet-accent)]">Care</span>
         </Link>
-        <nav className="flex items-center gap-3">
+        <nav className="hidden items-center gap-1 md:flex">
           <a
-            href="#demo"
+            href="#capacidades"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "cursor-pointer text-[var(--signal-muted)]"
+              "cursor-pointer text-[var(--fleet-muted)]"
             )}
           >
-            Demo
+            Monitoreo
+          </a>
+          <a
+            href="#senales"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "cursor-pointer text-[var(--fleet-muted)]"
+            )}
+          >
+            Alertas
+          </a>
+          <a
+            href="#senales"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "cursor-pointer text-[var(--fleet-muted)]"
+            )}
+          >
+            Seguridad
+          </a>
+        </nav>
+        <nav className="flex items-center gap-2">
+          <a
+            href="#simulador"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "cursor-pointer text-[var(--fleet-muted)]"
+            )}
+          >
+            Simulador
           </a>
           <a
             href="#cta"
             className={cn(
               buttonVariants({ size: "sm" }),
-              "cursor-pointer bg-[var(--signal-accent)] text-white hover:bg-[var(--signal-accent)]/90"
+              "cursor-pointer bg-[var(--fleet-accent)] text-white hover:bg-[var(--fleet-accent)]/90"
             )}
           >
-            Empezar
+            Comenzar
           </a>
         </nav>
       </div>

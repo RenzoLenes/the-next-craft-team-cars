@@ -129,19 +129,21 @@
   }
 }
 
-.signal-landing {
-  --signal-bg: #f8fafc;
-  --signal-panel: #eef2f6;
-  --signal-fg: #0f172a;
-  --signal-muted: #475569;
-  --signal-border: #e2e8f0;
-  --signal-accent: #dc2626;
-  --signal-hero-from: #f8fafc;
-  --signal-hero-via: #e8eef5;
-  --signal-hero-to: #dbe4ef;
+.fleet-landing {
+  --fleet-bg: #f8fafc;
+  --fleet-panel: #eef2f6;
+  --fleet-fg: #0f172a;
+  --fleet-muted: #475569;
+  --fleet-border: #e2e8f0;
+  --fleet-accent: #dc2626;
+  --fleet-hero-from: #f8fafc;
+  --fleet-hero-via: #e8eef5;
+  --fleet-hero-to: #dbe4ef;
+  --fleet-ok: #059669;
+  --fleet-warn: #d97706;
 }
 
-@keyframes signal-rise {
+@keyframes fleet-rise {
   from {
     opacity: 0;
     transform: translateY(16px);
@@ -152,7 +154,7 @@
   }
 }
 
-@keyframes signal-drift {
+@keyframes fleet-drift {
   0%,
   100% {
     transform: translate3d(0, 0, 0);
@@ -162,7 +164,7 @@
   }
 }
 
-@keyframes signal-grid {
+@keyframes fleet-grid {
   from {
     background-position: 0 0;
   }
