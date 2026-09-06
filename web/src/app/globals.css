@@ -130,17 +130,26 @@
 }
 
 .fleet-landing {
-  --fleet-bg: #f8fafc;
-  --fleet-panel: #eef2f6;
-  --fleet-fg: #0f172a;
-  --fleet-muted: #475569;
-  --fleet-border: #e2e8f0;
-  --fleet-accent: #dc2626;
-  --fleet-hero-from: #f8fafc;
-  --fleet-hero-via: #e8eef5;
-  --fleet-hero-to: #dbe4ef;
-  --fleet-ok: #059669;
-  --fleet-warn: #d97706;
+  /* superficie e tinta */
+  --fleet-bg: #f7f9fa;
+  --fleet-panel: #edf1f3;
+  --fleet-surface: #ffffff;
+  --fleet-fg: #12181b;
+  --fleet-muted: #5a6b73;
+  --fleet-border: #dde4e7;
+
+  /* marca — uno solo, nunca semántico */
+  --fleet-accent: #0e7c6b;
+  --fleet-accent-soft: rgba(14, 124, 107, 0.1);
+
+  /* semánticos — RESERVADOS, jamás decorativos */
+  --fleet-ok: #2e7d52;
+  --fleet-warn: #b0710f;
+  --fleet-crit: #c0362e;
+
+  --fleet-hero-from: #f7f9fa;
+  --fleet-hero-via: #eaf0f1;
+  --fleet-hero-to: #dfe8ea;
 }
 
 @keyframes fleet-rise {

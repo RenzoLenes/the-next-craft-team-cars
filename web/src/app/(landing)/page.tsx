@@ -1,7 +1,7 @@
-import { Capabilities } from "@/components/landing/capabilities";
-import { ControlSignals } from "@/components/landing/control-signals";
 import { Hero } from "@/components/landing/hero";
+import { Integrations } from "@/components/landing/integrations";
 import { MetricsSimulator } from "@/components/landing/metrics-simulator";
+import { Readings } from "@/components/landing/readings";
 import { FinalCta, SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 
@@ -11,8 +11,8 @@ export default function LandingPage() {
       <SiteHeader />
       <main>
         <Hero />
-        <Capabilities />
-        <ControlSignals />
+        <Readings />
+        <Integrations />
         <MetricsSimulator />
         <FinalCta />
       </main>
